@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: ws_david_lunch_picker
