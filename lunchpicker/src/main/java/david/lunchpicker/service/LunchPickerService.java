@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -30,15 +31,15 @@ public class LunchPickerService {
         this.totalFrequency = this.restaurantFrequencies.stream().mapToInt(RestaurantFrequency::getFrequency).sum();
     }
 
-    public String pickRestaurant() {
+    public Optional<RestaurantFrequency> pickRestaurant() {
         int randomKey = ThreadLocalRandom.current().nextInt(ONE, totalFrequency);
         for (int i = 0; i < restaurantFrequencies.size(); i++) {
             randomKey -= restaurantFrequencies.get(i).getFrequency();
             if (randomKey < 0) {
-                return restaurantFrequencies.get(i).getName();
+                return Optional.of(restaurantFrequencies.get(i));
             }
         }
-        return "No restaurant was picked.";
+        return Optional.empty();
     }
 
     public List<RestaurantFrequency> getAllRestaurantFrequencies() {
